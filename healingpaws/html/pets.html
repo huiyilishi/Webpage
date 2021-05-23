@@ -1,0 +1,210 @@
+{% extends "base.html" %}
+
+{% block content %}
+<title>House</title>
+
+<style>
+    table
+{
+animation:mymove 0.5s;
+-webkit-animation:mymove 0.5s; /*Safari and Chrome*/
+}
+
+
+@keyframes mymove
+{
+from {transform: rotateY(90deg);}
+to {transform: rotateY(0deg);}
+}
+
+@-webkit-keyframes mymove /*Safari and Chrome*/
+{
+from {transform: rotateY(90deg);}
+to {transform: rotateY(0deg);}
+}
+
+</style>
+    
+
+<body style="
+	overflow-x: hidden;
+	background: #50a3a2;
+	/*background: linear-gradient(135deg, rgb(165, 155, 224) 0%, rgba(242,147,113,1) 100%) no-repeat center center;*/
+	background-color: #87CEEB !important;
+    width:100vw;
+    height:100vh;
+    background-attachment: fixed;">
+            <br>
+
+<style>
+    th{
+        text-align:center;
+    }
+</style>
+
+<table class="table" style="width:500px;margin:auto; text-align:center;">
+	<div class="special-buttons">
+                       <div class="btn" data-toggle="modal" data-target="#myModal-add-pet"><span class="circle" style="z-index: 0;"></span><span class="text">Add House</span></div>
+
+    	<div class="special-buttons">
+<!--                       <div class="btn" onclick='location.replace("/check_type")'><span class="circle" style="z-index: 0;"></span><span class="text">Get House Type</span></div> </div>
+
+                       </div>-->
+		</div>
+	</div>
+
+	<thead>
+		<tr>
+			<td>id</td>
+			<td>position</td>
+			<td>Photo</td>
+            <td>House type</td>
+			<td>Date</td>
+			<td>Delete</td>
+			<td>Manage</td>
+		</tr>
+	</thead>
+	<tbody>
+    {# active success warning danger #}
+
+	{%for p in pets%}
+		<tr class="{{['danger','active','success'][p.health]}}">
+			<td>{{p.id}}</td>
+			<td>{{p.position}}</td>
+			<!--<td><img src='/icon/{{rand}}/pet_icon_{{p.id}}.jpg' onerror="onerror=null;src='/img/t2.png'" width="50px" height="50px"></td>-->
+			<td><img src='/html/img/pic/{{ p.img }}' onerror="onerror=null;src='/img/t2.png'" width="50px" height="50px"></td>
+            <td>{{p.status}}</td>
+			<td>{{ p.pub_time.strftime("%Y-%m-%d") }}</td>
+			<td> <div class="special-buttons">
+                       <div class="btn" onclick="prepareDelete('{{p.id}}','{{p.petsname}}')" data-toggle="modal" data-target="#myModal-delete-pet"><span class="circle" style="z-index: 0;"></span><span class="text">Delete</span></div> </div></td>
+			<td> <div class="special-buttons">
+                       <div class="btn"  onclick="prepareManage('{{p.id}}','{{p.position}}'
+                       )" data-toggle="modal" data-target="#myModal-manage-pet"><span class="circle" style="z-index: 0;"></span><span class="text">Manage</span></div> </div></td>
+		</tr>
+		{%endfor%}
+	</tbody>
+</table>
+
+<div class="modal-box">
+    	<!-- Modal -->
+	<div class="modal fade" id="myModal-delete-pet" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="display: none;">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+				<div class="modal-body">
+					<div class="icon"> ! </div>
+					<h3 class="title">Delete this house?</h3>
+					<form method="POST">
+					
+					<p class="description">House location is null</p>
+					<button name='delete_pet' class="subscribe">Delete</button>
+					
+					</form>
+				</div>
+            </div>
+		</div>
+	</div>
+</div>
+
+
+
+<div class="modal-box">
+    	<!-- Modal -->
+	<div class="modal fade" id="myModal-manage-pet" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="display: none;">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+				<div class="modal-body">
+					<h3 class="title">Manage pet</h3>
+					<form  enctype="multipart/form-data" style="text-align: center;" method="POST" >
+<!--						<h5>place</h5><input name="pet_name"/><br>
+						<h5>photo</h5><input type="file" name="pet_icon" style="margin-left:70px;" />
+						<h5>date in produced</h5><input name="pet_birthday" type="date" /><br>
+						<h5>state</h5>
+						<select name='pet_health'>
+							<option value="0" >bad</option>
+							<option value="1" >unknown</option>
+							<option value="2" >perfect</option>
+						</select>
+						<p class="description"></p>-->
+
+						<input name="id" value="1" hidden/><br>
+						<h5>house place</h5><input name="pet_name"/><br>
+						<!--<h5>photo</h5><input type="file" name="pet_icon" style="margin-left:70px;" />-->
+						<!--<h5>date in produced</h5><input name="pet_birthday" type="date" /><br>-->
+						<h5>beds</h5><input name="beds"/><br>
+						<h5>baths</h5><input name="baths"/><br>
+						<h5>area</h5><input name="area"/><br>
+						<h5>prices</h5><input name="prices"/><br>
+						<h5>latitude</h5><input name="latitude"/><br>
+						<h5>longitude</h5><input name="longitude"/><br>
+						<h5>status</h5>
+						<select name='status'>
+							{% for sta in status %}
+								<option value="{{ sta }}" selected="selected">{{ sta }}</option>
+							{% endfor %}
+						</select>
+						<button name="update_pet" value="update_pet" class="subscribe">Save</button>
+					</form>
+				</div>
+            </div>
+		</div>
+	</div>
+</div>
+
+<script>
+	function prepareDelete(id,name){
+		document.querySelector('#myModal-delete-pet .subscribe').setAttribute('value',id);
+		document.querySelector('#myModal-delete-pet .description').textContent='The house location is '+name;
+	}
+	function prepareManage(id,name,birth,healthy){
+		inputs=document.querySelectorAll('#myModal-manage-pet input')
+		inputs[0].setAttribute('value',id);
+		inputs[1].setAttribute('value',name);
+
+		// inputs[2].setAttribute('value',birth)
+		options=document.querySelectorAll('#myModal-manage-pet option')
+		for(var i=0;i<options.length;i++)
+			options[i].removeAttribute('selected')
+		options[healthy].setAttribute('selected','selected')
+		document.querySelector('#myModal-manage-pet .subscribe').setAttribute('value',id)
+	}
+</script>
+
+
+<div class="modal-box">
+    	<!-- Modal -->
+	<div class="modal fade" id="myModal-add-pet" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="display: none;">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+				<div class="modal-body">
+					<h3 class="title">new house</h3>
+					<form  enctype="multipart/form-data" style="text-align: center;" method="POST" >
+						<h5>house place</h5><input name="pet_name"/><br>
+						<h5>photo</h5><input type="file" name="pet_icon" style="margin-left:70px;" />
+						<!--<h5>date in produced</h5><input name="pet_birthday" type="date" /><br>-->
+						<h5>beds</h5><input name="beds"/><br>
+						<h5>baths</h5><input name="baths"/><br>
+						<h5>area</h5><input name="area"/><br>
+						<h5>prices</h5><input name="prices"/><br>
+						<h5>latitude</h5><input name="latitude"/><br>
+						<h5>longitude</h5><input name="longitude"/><br>
+						<h5>status</h5>
+						<select name='status'>
+							{% for sta in status %}
+								<option value="{{ sta }}" selected="selected">{{ sta }}</option>
+							{% endfor %}
+						</select>
+						<p class="description"></p>
+						<button name="submit" value="add" class="subscribe">Add</button>
+					
+					</form>
+				</div>
+            </div>
+		</div>
+	</div>
+</div>
+
+</body>
+{% endblock content %}
